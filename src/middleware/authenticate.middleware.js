@@ -13,7 +13,9 @@ export const authenticate = async (req, res, next) => {
   //seprate
   const token = authHeader.split(" ")[1];
   // check if access token is valid ,payload ..
-  const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
+  const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET, {
+    algorithms: ["HS256"],
+  });
   // check if access token revoked in database
   const revokedAccess = await revokedAccessToken.findOne({
     where: {
@@ -33,5 +35,6 @@ export const authenticate = async (req, res, next) => {
     throw new AppError("Invalid or expired access token", 401);
   }
   req.user = existingUser;
+  req.auth = decoded;
   next();
 };

@@ -38,4 +38,27 @@ export const signInSchema = joi
     "object.unknown": "Unknown field: {{#label}}",
   });
 
-export default signInSchema;
+// change password schema
+//================================================================
+
+export const changePasswordSchema = joi
+  .object({
+    current_password: joi.string().required(),
+
+    new_password: joi.string().min(8).required(),
+
+    confirm_new_password: joi
+      .string()
+      .valid(joi.ref("new_password"))
+      .required()
+      .messages({
+        "any.only": "New password and confirmation do not match",
+      }),
+  })
+  .unknown(false)
+  .messages({
+    "string.min": "{{#label}} must be at least {{#limit}} characters",
+    "string.empty": "{{#label}} cannot be empty",
+    "any.required": "{{#label}} is required",
+    "object.unknown": "Unknown field: {{#label}}",
+  });

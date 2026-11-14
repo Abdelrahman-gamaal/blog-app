@@ -23,7 +23,10 @@ const refreshToken = sequelize.define(
       unique: true,
       field: "token_hash",
     },
-
+    familyId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
     expiresAt: {
       type: DataTypes.DATE,
       allowNull: false,
